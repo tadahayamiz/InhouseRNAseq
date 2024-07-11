@@ -36,7 +36,7 @@ realpath() {
 
 # url argument check
 if [ "$1" = "human" ]; then
-  tgt_url=${$main_url/"SPECIES"/"human"}
+  tgt_url=${$main_url/"SPECIES"/"$1"}
 elif [ "$1" = "mouse" ]; then
   tgt_url=${$main_url/"SPECIES"/"mouse"}
 elif [ "$1" = "rat" ]; then
