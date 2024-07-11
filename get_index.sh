@@ -24,11 +24,6 @@ EOM
   exit 2
 }
 
-# get filename
-get_filename() {
-    echo "$1" | sed 's/\.[^\.]*$//'
-}
-
 # get absolute path
 realpath() {
   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"

@@ -27,7 +27,8 @@ EOM
 
 # get filename
 get_filename() {
-    echo "$1" | sed 's/\.[^\.]*$//'
+    tmp=$1
+    echo ${tmp%%.*}
 }
 
 # get absolute path
