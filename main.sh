@@ -121,6 +121,9 @@ parent=`get_upper ${work_dir}`
 # # move
 # pushd ${work_dir}
 
+echo ${work_dir}
+echo ${parent}
+
 q1=()
 for f1 in "${work_dir}*_1.*"; do
   q1+=($f1)

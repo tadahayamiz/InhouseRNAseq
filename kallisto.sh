@@ -19,7 +19,7 @@ usage() {
 Usage: $(basename "$0") [OPTION] index_path fastq_path1 fastq_path2...
   -h          Display help
   -b VALUE    Number of bootstrap samples, default 100
-  -t VALUE    Number of threads, default 2
+  -t VALUE    Number of threads, default 8
 EOM
 
   exit 2
@@ -55,7 +55,7 @@ fi
 
 # option check
 n_boot=100
-n_threads=2
+n_threads=8
 while getopts b:t:hv opt; do
   case "$opt" in
     h)
