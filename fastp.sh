@@ -6,7 +6,7 @@
 # version
 ver=1.0.0
 
-echo "hello world3"
+echo "hello world4"
 
 # history
 # 240710 start writing (Tadahaya Mizuno)
@@ -100,7 +100,8 @@ n1=`get_filename ${f1}`
 o1=${parent}/tmp_dir/${tag}_${f1}
 h1=${parent}/tmp_dir/report_${n1}.html
 j1=${parent}/tmp_dir/report_${n1}.json
-if "${pe}"; then
+if "${pe}"
+then
   f2=`basename "$2"`
   n2=`get_filename ${f2}`
   o2=${parent}/tmp_dir/${tag}_${f2}
