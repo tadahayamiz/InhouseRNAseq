@@ -86,12 +86,12 @@ shift $((OPTIND - 1))
 ########################
 # main function
 
-# pathの操作
+# path handling
 curr_dir=`dirname "$1"`
 parent=`get_upper ${curr_dir}`
-make_tmp ${parent} # ~/tmp_dirを作成
+make_tmp ${parent} # prepare ./tmp_dir
 
-# 移動
+# move
 pushd ${curr_dir}
 
 # fastp
@@ -119,9 +119,9 @@ o2=${parent}/tmp_dir/${tag}_${f2}
 fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
 -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 
-# tmp_dirの名称を変更
+# change tmp_dir name
 stamp=`date "+%Y%m%d-%H%M%S"`
 mv ${curr_par}/tmp_dir ${curr_par}/fastp_${stamp}
 
-# 元に戻る
+# back
 popd
