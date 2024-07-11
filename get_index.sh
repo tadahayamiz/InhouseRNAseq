@@ -45,7 +45,7 @@ else
   echo "!! Unexpected argument: give human, mouse, or rat !!"
   exit 1
 fi
-tgt_url=${$(main_url)/"SPECIES"/$1}
+# tgt_url=${$(main_url)/"SPECIES"/$1}
 tgt_url=`echo "$main_url" | sed s/SPECIES/$1/g`
 
 if [ $# -eq 2 ]; then
