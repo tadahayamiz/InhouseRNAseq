@@ -43,6 +43,7 @@ if [ "`echo $1 | grep index`" ]; then
 else
   echo "!! Unexpected argument: give index file !!"
 fi
+# fastq file check
 if [ $# -eq 2 ]; then
   pe=false
 elif [ $# -eq 3 ]; then
