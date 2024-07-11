@@ -106,6 +106,10 @@ make_tmp ${parent}
 if [ "${outdir}" = "" ]; then
   outdir="${parent}/TMPDIR"
 fi
+path_script=`realpath $0`
+dir_script=`dirname ${path_script}`
+path_fastp="${dir_script}/fastp.sh"
+path_kallisto="${dir_script}/kallisto.sh"
 
 # get fastq file list
 q1=()
@@ -120,8 +124,8 @@ l1=${#q1[@]}
 l2=${#q2[@]}
 
 # make scripts executable
-chmod +x fastp.sh
-chmod +x kallisto.sh
+chmod +x ${path_fastp}
+chmod +x ${path_kallisto}
 
 # main loop
 if [ ${l1} == 0 ] && [ ${l2} == 0 ]; then
@@ -137,12 +141,12 @@ elif [ ${l1} == ${l2} ]; then
   for ix in ${!q1[@]}; do
     echo "--- iter "$ix" ---"
     # fastp
-    source fastp.sh ${q1[ix]} ${q2[ix]}
+    source ${path_fastp} ${q1[ix]} ${q2[ix]}
     # kallisto
     # get fastq files starting with TRIM_
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1*"`
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2*"`
-    source kallisto.sh $1 ${tmp1} ${tmp2} -b ${n_boot} -t ${n_threads}
+    source ${path_kallisto} $1 ${tmp1} ${tmp2} -b ${n_boot} -t ${n_threads}
     # move the result
     mv ${work_dir}/KALLISTO_* ${outdir}
   done
