@@ -1,13 +1,19 @@
 #!/bin/bash
+
 ########################
 # description
 # main runner for fastp
+
 ########################
 # version
 ver=1.0.0
+
+echo "hello world"
+
 ########################
 # history
 # 240710 start writing (Tadahaya Mizuno)
+
 ########################
 # preparation
 # function for help
