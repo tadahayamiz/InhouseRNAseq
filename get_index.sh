@@ -36,7 +36,19 @@ realpath() {
 
 # url argument check
 if [ "$1" = "human" ]; then
+  tgt_url=$(${main_url}/"SPECIES"/"$1")
+  echo 1
+  tgt_url=$($main_url/"SPECIES"/"$1")
+  echo 2
   tgt_url=${$(main_url)/"SPECIES"/"$1"}
+  echo 3
+  tgt_url=${$(main_url)/"SPECIES"/$1}
+  echo 4
+  tgt_url=${$(main_url)/SPECIES/$1}
+  echo 5
+  tgt_url=${$main_url/SPECIES/$1}
+  echo 6
+
 elif [ "$1" = "mouse" ]; then
   tgt_url=${$main_url/"SPECIES"/"mouse"}
 elif [ "$1" = "rat" ]; then
