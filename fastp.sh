@@ -1,21 +1,15 @@
 #!/bin/bash
-
 ########################
 # description
 # main runner for fastp
-
 ########################
 # version
 ver=1.0.0
-
 ########################
 # history
 # 240710 start writing (Tadahaya Mizuno)
-
-
 ########################
 # preparation
-
 # function for help
 usage() {
   cat <<EOM
@@ -29,7 +23,7 @@ EOM
 
 # get filename
 get_filename() {
-  echo "$1" | sed 's/\.[^\.]*$//'
+    echo "$1" | sed 's/\.[^\.]*$//'
 }
 
 # get absolute path
