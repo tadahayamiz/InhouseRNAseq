@@ -92,30 +92,32 @@ curr_dir=`dirname "$1"`
 parent=`get_upper ${curr_dir}`
 make_tmp ${parent} # prepare ./tmp_dir
 
-# move
-pushd ${curr_dir}
+echo $curr_dir
 
-# fastp
-f1=`basename "$1"`
-n1=`get_filename ${f1}`
-o1=${parent}/tmp_dir/${tag}_${f1}
-h1=${parent}/tmp_dir/report_${n1}.html
-j1=${parent}/tmp_dir/report_${n1}.json
+# # move
+# pushd ${curr_dir}
 
-if "${pe}"; then
-  f2=`basename "$2"`
-  n2=`get_filename ${f2}`
-  o2=${parent}/tmp_dir/${tag}_${f2}
-  fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
-  -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
-else
-  fastp --detect_adapter_for_pe -i ${f1} -3 -o ${o1} \
-  -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
-fi
+# # fastp
+# f1=`basename "$1"`
+# n1=`get_filename ${f1}`
+# o1=${parent}/tmp_dir/${tag}_${f1}
+# h1=${parent}/tmp_dir/report_${n1}.html
+# j1=${parent}/tmp_dir/report_${n1}.json
 
-# change tmp_dir name
-stamp=`date "+%Y%m%d-%H%M%S"`
-mv ${curr_par}/tmp_dir ${curr_par}/fastp_${stamp}
+# if "${pe}"; then
+#   f2=`basename "$2"`
+#   n2=`get_filename ${f2}`
+#   o2=${parent}/tmp_dir/${tag}_${f2}
+#   fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
+#   -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+# else
+#   fastp --detect_adapter_for_pe -i ${f1} -3 -o ${o1} \
+#   -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+# fi
 
-# back
-popd
+# # change tmp_dir name
+# stamp=`date "+%Y%m%d-%H%M%S"`
+# mv ${curr_par}/tmp_dir ${curr_par}/fastp_${stamp}
+
+# # back
+# popd
