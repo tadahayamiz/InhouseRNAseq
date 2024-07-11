@@ -95,7 +95,7 @@ parent=`get_upper ${work_dir}` # full path
 make_tmp ${parent} # prepare ${parent}/tmp_dir
 
 # move
-pushd ${work_dir}
+pushd work_dir
 
 # fastp
 f1=`basename "$1"`
