@@ -27,7 +27,8 @@ EOM
 
 # get filename
 get_filename() {
-    echo "$1" | sed 's/\.[^\.]*$//'
+    tmp=$1
+    echo ${tmp%%.*}
 }
 
 # get absolute path
@@ -86,8 +87,9 @@ full1=`realpath $2` # full path
 work_dir=`dirname ${full1}` # full path
 
 n=${full1%%.*}
-
+m=`get_filename ${full1}`
 echo $n
+echo $m
 
 # # kallisto
 # f1=`basename "${full1}"`
