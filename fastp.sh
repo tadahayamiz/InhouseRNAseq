@@ -38,8 +38,9 @@ realpath() {
 
 # get absolute path of the parent dir of the given
 get_upper() {
-  d=`dirname $1`
-  echo `realpath $d`
+  full=`realpath $1`
+  dir0=`dirname ${full}`
+  echo `dirname ${dir0}`
 }
 
 # make tmp_dir under the given
@@ -88,11 +89,14 @@ shift $((OPTIND - 1))
 # main function
 
 # path handling
-curr_dir=`dirname "$1"`
-parent=`get_upper ${curr_dir}`
+full=`realpath $1`
+work_dir=`dirname ${full}`
+parent=`get_upper ${work_dir}`
 make_tmp ${parent} # prepare ./tmp_dir
 
-echo $curr_dir
+echo $full
+echo $work_dir
+echo $parent
 
 # # move
 # pushd ${curr_dir}
