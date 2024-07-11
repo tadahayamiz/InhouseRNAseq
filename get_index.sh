@@ -17,7 +17,7 @@ main_url=https://github.com/pachterlab/kallisto-transcriptome-indices/releases/d
 # function for help
 usage() {
   cat <<EOM
-Usage: $(basename "$0") [OPTION] fastq_path1 fastq_path2...
+Usage: $(basename "$0") [OPTION] species output_path...
   -h          Display help
 EOM
 
@@ -35,11 +35,11 @@ realpath() {
 }
 
 # url argument check
-if [[ "$1" = "human" ]]; then
+if [[ "$1"="human" ]]; then
   tgt_url=${main_url/"SPECIES"/"human"}
-elif [[ "$1" = "mouse" ]]; then
+elif [[ "$1"="mouse" ]]; then
   tgt_url=${main_url/"SPECIES"/"mouse"}
-elif [[ "$1" = "rat" ]]; then
+elif [[ "$1"="rat" ]]; then
   tgt_url=${main_url/"SPECIES"/"rat"}
 else
   echo "!! Unexpected argument: give human, mouse, or rat !!"
@@ -78,8 +78,11 @@ shift $((OPTIND - 1))
 output=`realpath $2` # full path
 fname=`basename ${tgt_url}`
 
-# DL
-!wget -P ${output}"/" ${tgt_url}
+echo $output
+echo $fname
 
-# unzip
-!tar Jxfv ${output}"/"${fname} -C ${output}
+# # DL
+# !wget -P ${output}"/" ${tgt_url}
+
+# # unzip
+# !tar Jxfv ${output}"/"${fname} -C ${output}
