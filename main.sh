@@ -19,7 +19,6 @@ usage() {
 Usage: $(basename "$0") [OPTION] index_path fastq_dir...
   -h          Display help
   -o VALUE    Output directory, default current
-  -r BOOL     Remove the trimmed fastq files, default false
   -b VALUE    Number of bootstrap samples, default 100
   -t VALUE    Number of threads, default 2
 EOM
@@ -66,7 +65,7 @@ fi
 outdir=""
 res_only=false
 n_boot=100
-n_threads=2
+n_threads=8
 while getopts o:r:b:t:hv opt; do
   case "$opt" in
     h)
@@ -75,9 +74,6 @@ while getopts o:r:b:t:hv opt; do
       ;;
     o)
       outdir=$OPTARG
-      ;;
-    r)
-      res_only=$OPTARG
       ;;
     b)
       n_boot=$OPTARG
@@ -106,14 +102,12 @@ echo ">> start fastp + kallisto"
 # path handling
 work_dir=`realpath $2` # full path
 parent=`dirname ${work_dir}`
-# make_tmp ${parent}
-# if [ "${outdir}" = "" ]; then
-#   outdir="${parent}/TMPDIR"
-# fi
+make_tmp ${parent}
+if [ "${outdir}" = "" ]; then
+  outdir="${parent}/TMPDIR"
+fi
 
-# # move
-# pushd ${work_dir}
-
+# get fastq file list
 q1=()
 for f1 in "${work_dir}/"*_1.*; do
   q1+=("${f1}")
@@ -122,42 +116,48 @@ q2=()
 for f2 in "${work_dir}/"*_2.*; do
   q2+=("${f2}")
 done
+l1=${#q1[@]}
+l2=${#q2[@]}
 
-# 配列の中身を確認
-echo ${q1[@]}
-echo ${q2[@]}
-# 配列の長さを確認
-echo ${#q1[@]}
-echo ${#q2[@]}
+# make scripts executable
+chmod +x fastp.sh
+chmod +x kallisto.sh
 
-# if [ ${#q1[@]} != ${#q2[@]} ]; then
-#   echo "!! The number of ends were mismatched !!"
-#   exit 1
-# fi
-
-
-
-# curr=`realpath $1`
-# curr_par=`get_upper $1`
-# make_tmp ${curr_par}
-# for ix in ${!q1[@]}; do
-#   echo "--- iter "$ix" ---"
-#   temp=${q1[ix]}
-#   temp2="salmon_"${temp/".${extension}"/''}
-#   echo ${temp2}
-#   salmon quant -i $idx_path -l A -1 ${q1[ix]} -2 ${q2[ix]} --validateMappings --gcBias --seqBias -o ${curr_par}/tmp_dir/${temp2}
-#   if "${res_only}"; then
-#     rm -r ${q1[ix]} ${q2[ix]}
-#   fi
-# done
-
-# mv ${curr_par}/tmp_dir ${curr_par}/res_salmon
+# main loop
+if [ ${l1} == 0 ] && [ ${l2} == 0 ]; then
+  echo "!! No fastq files were found !!"
+  exit 1
+elif [ ${l2} == 0 ]; then
+  echo ">> single-end"
 
 
 
+elif [ ${l1} == ${l2} ]; then
+  echo ">> pair-end"
+  for ix in ${!q1[@]}; do
+    echo "--- iter "$ix" ---"
+    # fastp
+    source fastp.sh ${q1[ix]} ${q2[ix]}
+    # kallisto
+    # get fastq files starting with TRIM_
+    tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1*"`
+    tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2*"`
+    source kallisto.sh $1 ${tmp1} ${tmp2} -b ${n_boot} -t ${n_threads}
+    # move the result
+    mv ${work_dir}/KALLISTO_* ${outdir}
+  done
 
-# # move back
-# popd
+
+
+
+
+else
+  echo "!! The number of ends were mismatched !!"
+  exit 1
+fi
+
+
+
 
 # display time
 end=`date +%s`
