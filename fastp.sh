@@ -35,9 +35,8 @@ realpath() {
 
 # get absolute path of the parent dir of the given
 get_upper() {
-  curr_path=`case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"`
-  curr_name=`basename ${curr_path}`
-  echo ${${curr_path}//"/"${curr_name}/}
+  d=`dirname $1`
+  echo `realpath $d`
 }
 
 echo `get_upper $1`
