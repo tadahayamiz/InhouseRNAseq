@@ -123,8 +123,12 @@ for f2 in "${work_dir}/"*_2.*; do
   q2+=("${f2}")
 done
 
+# 配列の中身を確認
 echo ${q1[@]}
 echo ${q2[@]}
+# 配列の長さを確認
+echo ${#q1[@]}
+echo ${#q2[@]}
 
 # if [ ${#q1[@]} != ${#q2[@]} ]; then
 #   echo "!! The number of ends were mismatched !!"
