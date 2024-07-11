@@ -28,37 +28,37 @@ get_filename() {
     echo "$1" | sed 's/\.[^\.]*$//'
 }
 
-# get absolute path
-realpath() {
-  case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
-}
+# # get absolute path
+# realpath() {
+#   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
+# }
 
-# get absolute path of the parent dir of the given
-get_upper() {
-  curr_path=`case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"`
-  curr_name=`basename ${curr_path}`
-  res=${`${curr_path}`//"/${curr_name}"/}
-  echo ${res}
-}
+# # get absolute path of the parent dir of the given
+# get_upper() {
+#   curr_path=`case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"`
+#   curr_name=`basename ${curr_path}`
+#   res=${`${curr_path}`//"/${curr_name}"/}
+#   echo ${res}
+# }
 
-# make tmp_dir under the given
-make_tmp() {
-  tmp_path=${1}/tmp_dir
-  if [ -e ${tmp_path} ]; then
-      rm -rf ${tmp_path}
-  fi
-  mkdir ${tmp_path}
-}
+# # make tmp_dir under the given
+# make_tmp() {
+#   tmp_path=${1}/tmp_dir
+#   if [ -e ${tmp_path} ]; then
+#       rm -rf ${tmp_path}
+#   fi
+#   mkdir ${tmp_path}
+# }
 
-# url argument check
-if [ "$1" = "" ]; then
-  echo "!! Give a name of fastq file !!"
-  exit 1
-fi
-pe=false
-if [ "$2" = "" ]; then
-  pe=true
-fi
+# # url argument check
+# if [ "$1" = "" ]; then
+#   echo "!! Give a name of fastq file !!"
+#   exit 1
+# fi
+# pe=false
+# if [ "$2" = "" ]; then
+#   pe=true
+# fi
 
 # # option check
 # tag=trim
