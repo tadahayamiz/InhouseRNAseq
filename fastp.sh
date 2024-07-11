@@ -8,20 +8,20 @@ ver=1.0.0
 
 echo "hello world7"
 
-# # history
-# # 240710 start writing (Tadahaya Mizuno)
+# history
+# 240710 start writing (Tadahaya Mizuno)
 
-# # preparation
-# # function for help
-# usage() {
-#   cat <<EOM
-# Usage: $(basename "$0") [OPTION] fastq_path1 fastq_path2...
-#   -h          Display help
-#   -t VALUE    Add a tag for the output, default trim
-# EOM
+# preparation
+# function for help
+usage() {
+  cat <<EOM
+Usage: $(basename "$0") [OPTION] fastq_path1 fastq_path2...
+  -h          Display help
+  -t VALUE    Add a tag for the output, default trim
+EOM
 
-#   exit 2
-# }
+  exit 2
+}
 
 # # get filename
 # get_filename() {
