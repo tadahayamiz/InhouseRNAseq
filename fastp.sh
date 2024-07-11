@@ -6,7 +6,7 @@
 # version
 ver=1.0.0
 
-echo "hello world5"
+echo "hello world6"
 
 # history
 # 240710 start writing (Tadahaya Mizuno)
@@ -116,8 +116,7 @@ j1=${parent}/tmp_dir/report_${n1}.json
 f2=`basename "$2"`
 n2=`get_filename ${f2}`
 o2=${parent}/tmp_dir/${tag}_${f2}
-fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
--h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 
 # change tmp_dir name
 stamp=`date "+%Y%m%d-%H%M%S"`
