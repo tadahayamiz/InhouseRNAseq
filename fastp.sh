@@ -84,44 +84,38 @@ while getopts t:hv opt; do
 done
 shift $((OPTIND - 1))
 
-# ########################
-# # main function
+########################
+# main function
 
-# # path handling
-# curr_dir=`dirname "$1"`
-# parent=`get_upper ${curr_dir}`
-# make_tmp ${parent} # prepare ./tmp_dir
+# path handling
+curr_dir=`dirname "$1"`
+parent=`get_upper ${curr_dir}`
+make_tmp ${parent} # prepare ./tmp_dir
 
-# # move
-# pushd ${curr_dir}
+# move
+pushd ${curr_dir}
 
-# # fastp
-# f1=`basename "$1"`
-# n1=`get_filename ${f1}`
-# o1=${parent}/tmp_dir/${tag}_${f1}
-# h1=${parent}/tmp_dir/report_${n1}.html
-# j1=${parent}/tmp_dir/report_${n1}.json
+# fastp
+f1=`basename "$1"`
+n1=`get_filename ${f1}`
+o1=${parent}/tmp_dir/${tag}_${f1}
+h1=${parent}/tmp_dir/report_${n1}.html
+j1=${parent}/tmp_dir/report_${n1}.json
 
-# # if "${pe}"
-# # then
-# #   f2=`basename "$2"`
-# #   n2=`get_filename ${f2}`
-# #   o2=${parent}/tmp_dir/${tag}_${f2}
-# #   fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
-# #   -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
-# # else
-# #   fastp --detect_adapter_for_pe -i ${f1} -3 -o ${o1} \
-# #   -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
-# # fi
+if "${pe}"; then
+  f2=`basename "$2"`
+  n2=`get_filename ${f2}`
+  o2=${parent}/tmp_dir/${tag}_${f2}
+  fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
+  -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+else
+  fastp --detect_adapter_for_pe -i ${f1} -3 -o ${o1} \
+  -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+fi
 
-# f2=`basename "$2"`
-# n2=`get_filename ${f2}`
-# o2=${parent}/tmp_dir/${tag}_${f2}
-# fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+# change tmp_dir name
+stamp=`date "+%Y%m%d-%H%M%S"`
+mv ${curr_par}/tmp_dir ${curr_par}/fastp_${stamp}
 
-# # change tmp_dir name
-# stamp=`date "+%Y%m%d-%H%M%S"`
-# mv ${curr_par}/tmp_dir ${curr_par}/fastp_${stamp}
-
-# # back
-# popd
+# back
+popd
