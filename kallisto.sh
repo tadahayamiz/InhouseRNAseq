@@ -36,7 +36,7 @@ realpath() {
 }
 
 # url argument check
-if [ "$1" =~ "index" ]; then
+if [[ "$1" =~ "index" ]]; then
   : # do nothing
 else
   echo "!! Unexpected argument: give index file !!"
@@ -85,7 +85,7 @@ idx=`realpath $1` # full path
 full1=`realpath $2` # full path
 work_dir=`dirname ${full1}` # full path
 
-n=${$full1%%.*}
+n=${$(full1)%%.*}
 echo $n
 
 # # kallisto
