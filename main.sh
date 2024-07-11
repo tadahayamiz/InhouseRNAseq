@@ -38,13 +38,6 @@ realpath() {
   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
 }
 
-# get absolute path of the parent dir of the given
-get_upper() {
-  full=`realpath $1`
-  dir0=`dirname ${full}`
-  echo `dirname ${dir0}`
-}
-
 # make tmp_dir under the given
 make_tmp() {
   tmp_path=${1}/TMPDIR
@@ -112,7 +105,7 @@ echo ">> start fastp + kallisto"
 
 # path handling
 work_dir=`realpath $2` # full path
-parent=`get_upper ${work_dir}`
+parent=`dirname ${work_dir}`
 # make_tmp ${parent}
 # if [ "${outdir}" = "" ]; then
 #   outdir="${parent}/TMPDIR"
