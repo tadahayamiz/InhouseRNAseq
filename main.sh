@@ -114,6 +114,7 @@ parent=`dirname ${work_dir}`
 # # move
 # pushd ${work_dir}
 
+q1=()
 for f1 in "${work_dir}*_1.*"; do
   q1+=(${f1})
 done
