@@ -16,9 +16,10 @@ ver=1.0.0
 # function for help
 usage() {
   cat <<EOM
-Usage: $(basename "$0") [OPTION] fastq_path1 fastq_path2...
+Usage: $(basename "$0") [OPTION] index_path fastq_path1 fastq_path2...
   -h          Display help
-  -t VALUE    Add a tag for the output, default trim
+  -b VALUE    Number of bootstrap samples, default 100
+  -t VALUE    Number of threads, default 2
 EOM
 
   exit 2
@@ -34,17 +35,8 @@ realpath() {
   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
 }
 
-# make tmp_dir under the given
-make_tmp() {
-  tmp_path=${1}/tmp_dir
-  if [ -e ${tmp_path} ]; then
-      rm -rf ${tmp_path}
-  fi
-  mkdir ${tmp_path}
-}
-
 # url argument check
-if [[ "$1" =~ "index" ]]; then
+if [ "$1" =~ "index" ]; then
   : # do nothing
 else
   echo "!! Unexpected argument: give index file !!"
@@ -59,15 +51,19 @@ else
 fi
 
 # option check
-tag=TRIM
-while getopts t:hv opt; do
+n_boot=100
+n_threads=2
+while getopts b:t:hv opt; do
   case "$opt" in
     h)
       usage
       exit
       ;;
+    b)
+      n_boot=$OPTARG
+      ;;
     t)
-      tag=$OPTARG
+      n_threads=$OPTARG
       ;;
     v)
       echo "v$ver"
@@ -85,31 +81,29 @@ shift $((OPTIND - 1))
 # main function
 
 # path handling
-full1=`realpath $1` # full path
-work_dir=`dirname ${full}` # full path
+idx=`realpath $1` # full path
+full1=`realpath $2` # full path
+work_dir=`dirname ${full1}` # full path
 
-# fastp
-f1=`basename "${full1}"`
-n1=`get_filename ${f1}`
-out1=${work_dir}/${tag}_${f1}
-html1=${work_dir}/report_${n1}.html
-json1=${work_dir}/report_${n1}.json
+n=${$full1%%.*}
+echo $n
 
-if "${pe}"; then
-  full2=`realpath $2`
-  f2=`basename "${full2}"`
-  n2=`get_filename ${f2}`
-  out2=${work_dir}/${tag}_${f2}
-  fastp \
-    --detect_adapter_for_pe \
-    -i ${full1} -I ${full2} \
-    -o ${out1} -O ${out2} \
-    -h ${html1} -j ${json1} \
-    -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
-else
-  fastp \
-    --detect_adapter_for_pe \
-    -i ${full1} -o ${out1} \
-    -h ${html1} -j ${json1} \
-    -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
-fi
+# # kallisto
+# f1=`basename "${full1}"`
+# n1=`get_filename ${f1}`
+# outdir=${work_dir}/KALLISTO_${n1}
+
+# if "${pe}"; then
+#   full2=`realpath $3`
+#   f2=`basename "${full2}"`
+#   n2=`get_filename ${f2}`
+#   kallisto \
+#     quant -i ${idx} -o ${outdir} \
+#     -b ${n_boot} -t ${n_threads} \
+#     ${full1} ${full2}
+# else
+#   kallisto \
+#     quant -i ${idx} -o ${outdir} \
+#     -b ${n_boot} -t ${n_threads} \
+#     ${full1}
+# fi

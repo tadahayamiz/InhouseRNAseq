@@ -10,7 +10,7 @@ main_url=https://github.com/pachterlab/kallisto-transcriptome-indices/releases/d
 
 ########################
 # history
-# 240710 start writing (Tadahaya Mizuno)
+# 240711 start writing (Tadahaya Mizuno)
 
 ########################
 # preparation
