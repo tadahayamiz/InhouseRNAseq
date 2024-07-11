@@ -94,11 +94,8 @@ work_dir=`dirname ${full}` # full path
 parent=`get_upper ${work_dir}` # full path
 make_tmp ${parent} # prepare ${parent}/tmp_dir
 
-echo work_dir
-echo ${work_dir}
-
-# # move
-# pushd work_dir
+# move
+pushd ${work_dir}
 
 # fastp
 f1=`basename "$1"`
@@ -122,5 +119,5 @@ fi
 stamp=`date "+%Y%m%d-%H%M%S"`
 mv ${parent}/tmp_dir ${parent}/fastp_${stamp}
 
-# # back
-# popd
+# back
+popd
