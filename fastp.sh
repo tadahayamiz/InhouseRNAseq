@@ -6,7 +6,7 @@
 # version
 ver=1.0.0
 
-echo "hello world4"
+echo "hello world5"
 
 # history
 # 240710 start writing (Tadahaya Mizuno)
@@ -100,17 +100,24 @@ n1=`get_filename ${f1}`
 o1=${parent}/tmp_dir/${tag}_${f1}
 h1=${parent}/tmp_dir/report_${n1}.html
 j1=${parent}/tmp_dir/report_${n1}.json
-if "${pe}"
-then
-  f2=`basename "$2"`
-  n2=`get_filename ${f2}`
-  o2=${parent}/tmp_dir/${tag}_${f2}
-  fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
-  -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
-else
-  fastp --detect_adapter_for_pe -i ${f1} -3 -o ${o1} \
-  -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
-fi
+
+# if "${pe}"
+# then
+#   f2=`basename "$2"`
+#   n2=`get_filename ${f2}`
+#   o2=${parent}/tmp_dir/${tag}_${f2}
+#   fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
+#   -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+# else
+#   fastp --detect_adapter_for_pe -i ${f1} -3 -o ${o1} \
+#   -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+# fi
+
+f2=`basename "$2"`
+n2=`get_filename ${f2}`
+o2=${parent}/tmp_dir/${tag}_${f2}
+fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
+-h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 
 # tmp_dirの名称を変更
 stamp=`date "+%Y%m%d-%H%M%S"`
