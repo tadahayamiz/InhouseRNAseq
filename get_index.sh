@@ -45,7 +45,6 @@ else
   echo "!! Unexpected argument: give human, mouse, or rat !!"
   exit 1
 fi
-# tgt_url=${$(main_url)/"SPECIES"/$1}
 tgt_url=`echo "$main_url" | sed s/SPECIES/$1/g`
 
 if [ $# -eq 2 ]; then
@@ -84,8 +83,8 @@ fname=`basename ${tgt_url}`
 echo $output
 echo $fname
 
-# # DL
-# !wget -P ${output}"/" ${tgt_url}
+# DL
+!wget -P ${output} ${tgt_url}
 
-# # unzip
-# !tar Jxfv ${output}"/"${fname} -C ${output}
+# unzip
+!tar Jxfv "${output}/${fname}" -C ${output}
