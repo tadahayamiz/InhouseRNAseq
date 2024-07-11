@@ -33,13 +33,13 @@ realpath() {
   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
 }
 
-# # get absolute path of the parent dir of the given
-# get_upper() {
-#   curr_path=`case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"`
-#   curr_name=`basename ${curr_path}`
-#   res=${`${curr_path}`//"/${curr_name}"/}
-#   echo ${res}
-# }
+# get absolute path of the parent dir of the given
+get_upper() {
+  curr_path=`case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"`
+  curr_name=`basename ${curr_path}`
+  res=${`${curr_path}`//"/${curr_name}"/}
+  echo ${res}
+}
 
 # # make tmp_dir under the given
 # make_tmp() {
