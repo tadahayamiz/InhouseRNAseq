@@ -192,3 +192,77 @@ echo "--------------------"
 # 220721 fix passing salmon index file
 # 22XXXX add single_end
 # 211228 start writing
+
+
+
+########################
+# preparation
+# function for help
+usage() {
+  cat <<EOM
+Usage: $(basename "$0") [OPTION] fastq_path1 fastq_path2...
+  -h          Display help
+  -t VALUE    Add a tag for the output, default trim
+EOM
+
+  exit 2
+}
+
+# get filename
+get_filename() {
+    echo "$1" | sed 's/\.[^\.]*$//'
+}
+
+# get absolute path
+realpath() {
+  case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
+}
+
+# get absolute path of the parent dir of the given
+get_upper() {
+  full=`realpath $1`
+  dir0=`dirname ${full}`
+  echo `dirname ${dir0}`
+}
+
+# make tmp_dir under the given
+make_tmp() {
+  tmp_path=${1}/tmp_dir
+  if [ -e ${tmp_path} ]; then
+      rm -rf ${tmp_path}
+  fi
+  mkdir ${tmp_path}
+}
+
+# url argument check
+if [ $# -eq 1 ]; then
+  pe=false
+elif [ $# -eq 2 ]; then
+  pe=true
+else
+  echo "!! Unexpected argument: give 1 or 2 fastq files !!"
+  exit 1
+fi
+
+# option check
+tag=TRIM
+while getopts t:hv opt; do
+  case "$opt" in
+    h)
+      usage
+      exit
+      ;;
+    t)
+      tag=$OPTARG
+      ;;
+    v)
+      echo "v$ver"
+      exit
+      ;;
+    \?)
+      echo '!! Unexpected argument !!'
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND - 1))

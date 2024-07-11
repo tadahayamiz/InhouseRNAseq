@@ -2,7 +2,8 @@
 
 ########################
 # description
-# main runner for fastp
+# runner for fastp
+# export the trimmed fastq files to the parent directory of the given fastq files
 
 # version
 ver=1.0.0
@@ -34,13 +35,6 @@ realpath() {
   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
 }
 
-# get absolute path of the parent dir of the given
-get_upper() {
-  full=`realpath $1`
-  dir0=`dirname ${full}`
-  echo `dirname ${dir0}`
-}
-
 # make tmp_dir under the given
 make_tmp() {
   tmp_path=${1}/tmp_dir
@@ -61,7 +55,7 @@ else
 fi
 
 # option check
-tag=trim
+tag=TRIM
 while getopts t:hv opt; do
   case "$opt" in
     h)
@@ -88,7 +82,7 @@ shift $((OPTIND - 1))
 
 # path handling
 full1=`realpath $1` # full path
-work_dir=`dirname ${full}` # full path
+work_dir=`dirname ${full1}` # full path
 
 # fastp
 f1=`basename "${full1}"`

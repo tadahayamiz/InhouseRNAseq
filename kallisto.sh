@@ -2,14 +2,14 @@
 
 ########################
 # description
-# main runner for kallisto
+# runner for kallisto
 
 # version
 ver=1.0.0
 
 ########################
 # history
-# 240711 start writing (Tadahaya Mizuno)
+# 240710 start writing (Tadahaya Mizuno)
 
 ########################
 # preparation
@@ -34,13 +34,6 @@ realpath() {
   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
 }
 
-# get absolute path of the parent dir of the given
-get_upper() {
-  full=`realpath $1`
-  dir0=`dirname ${full}`
-  echo `dirname ${dir0}`
-}
-
 # make tmp_dir under the given
 make_tmp() {
   tmp_path=${1}/tmp_dir
@@ -51,17 +44,22 @@ make_tmp() {
 }
 
 # url argument check
-if [ "$1" = "" ]; then
-  echo "!! Give a name of fastq file !!"
-  exit 1
+if [[ "$1" =~ "index" ]]; then
+  : # do nothing
+else
+  echo "!! Unexpected argument: give index file !!"
 fi
-pe=false
-if [ "$2" = "" ]; then
+if [ $# -eq 2 ]; then
+  pe=false
+elif [ $# -eq 3 ]; then
   pe=true
+else
+  echo "!! Unexpected argument: give 1 or 2 fastq files !!"
+  exit 1
 fi
 
 # option check
-tag=trim
+tag=TRIM
 while getopts t:hv opt; do
   case "$opt" in
     h)
@@ -89,21 +87,19 @@ shift $((OPTIND - 1))
 # path handling
 full1=`realpath $1` # full path
 work_dir=`dirname ${full}` # full path
-parent=`get_upper ${work_dir}` # full path
-make_tmp ${parent} # prepare ${parent}/tmp_dir
 
 # fastp
 f1=`basename "${full1}"`
 n1=`get_filename ${f1}`
-out1=${parent}/tmp_dir/${tag}_${f1}
-html1=${parent}/tmp_dir/report_${n1}.html
-json1=${parent}/tmp_dir/report_${n1}.json
+out1=${work_dir}/${tag}_${f1}
+html1=${work_dir}/report_${n1}.html
+json1=${work_dir}/report_${n1}.json
 
 if "${pe}"; then
   full2=`realpath $2`
   f2=`basename "${full2}"`
   n2=`get_filename ${f2}`
-  out2=${parent}/tmp_dir/${tag}_${f2}
+  out2=${work_dir}/${tag}_${f2}
   fastp \
     --detect_adapter_for_pe \
     -i ${full1} -I ${full2} \
@@ -117,15 +113,3 @@ else
     -h ${html1} -j ${json1} \
     -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 fi
-
-
-# index作成
-## 240214 kallisto HPからDLして使う
-
-# alignment
-kallisto quant -i index -o output TR_2386_005_1_paired.fq.gz TR_2386_005_2_paired.fq.gz
-
-
-# change tmp_dir name
-stamp=`date "+%Y%m%d-%H%M%S"`
-mv ${parent}/tmp_dir ${parent}/fastp_${stamp}
