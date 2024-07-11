@@ -114,14 +114,9 @@ parent=`dirname ${work_dir}`
 # # move
 # pushd ${work_dir}
 
-echo ${work_dir}
-echo ${parent}
-
-q1=()
 for f1 in "${work_dir}*_1.*"; do
   q1+=($f1)
 done
-q2=()
 for f2 in "${work_dir}*_2.*"; do
   q2+=($f2)
 done
