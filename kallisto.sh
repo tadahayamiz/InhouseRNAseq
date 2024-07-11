@@ -96,13 +96,13 @@ if "${pe}"; then
   full2=`realpath $3`
   f2=`basename "${full2}"`
   n2=`get_filename ${f2}`
-  kallisto \
-    quant -i ${idx} -o ${outdir} \
+  kallisto quant \
+    -i ${idx} -o ${outdir} \
     -b ${n_boot} -t ${n_threads} \
     ${full1} ${full2}
 else
-  kallisto \
-    quant -i ${idx} -o ${outdir} \
+  kallisto quant \
+    -i ${idx} -o ${outdir} \
     -b ${n_boot} -t ${n_threads} \
     ${full1}
 fi
