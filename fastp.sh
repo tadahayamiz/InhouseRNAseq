@@ -7,8 +7,6 @@
 # version
 ver=1.0.0
 
-echo "hello world7"
-
 ########################
 # history
 # 240710 start writing (Tadahaya Mizuno)
