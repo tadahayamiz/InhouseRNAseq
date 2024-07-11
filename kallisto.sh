@@ -118,6 +118,14 @@ else
     -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 fi
 
+
+# index作成
+## 240214 kallisto HPからDLして使う
+
+# alignment
+kallisto quant -i index -o output TR_2386_005_1_paired.fq.gz TR_2386_005_2_paired.fq.gz
+
+
 # change tmp_dir name
 stamp=`date "+%Y%m%d-%H%M%S"`
 mv ${parent}/tmp_dir ${parent}/fastp_${stamp}
