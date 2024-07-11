@@ -94,6 +94,9 @@ work_dir=`dirname ${full}` # full path
 parent=`get_upper ${work_dir}` # full path
 make_tmp ${parent} # prepare ${parent}/tmp_dir
 
+echo work_dir
+echo ${work_dir}
+
 # move
 pushd work_dir
 
