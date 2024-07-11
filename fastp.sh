@@ -51,14 +51,13 @@ make_tmp() {
 }
 
 # url argument check
-if [ "$1" = "" ]; then
-  echo "!! Give a name of fastq file !!"
-  exit 1
-fi
-pe=false
-if [ "$2" = "" ]; then
+if [ $# -eq 1 ]; then
+  pe=false
+elif [ $# -eq 2 ]; then
   pe=true
-  echo "!! Paired-end mode !!"
+else
+  echo "!! Unexpected argument: give 1 or 2 fastq files !!"
+  exit 1
 fi
 
 # option check
