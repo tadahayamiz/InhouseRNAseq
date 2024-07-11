@@ -1,13 +1,13 @@
 #!/bin/bash
 
-########################
 # description
 # main runner for fastp
+
 ########################
 # version
 ver=1.0.0
 
-echo "hello world"
+echo "hello world2"
 
 ########################
 # history
