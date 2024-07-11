@@ -58,6 +58,7 @@ fi
 pe=false
 if [ "$2" = "" ]; then
   pe=true
+  echo "!! Paired-end mode !!"
 fi
 
 # option check
