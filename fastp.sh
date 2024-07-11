@@ -1,5 +1,6 @@
 #!/bin/bash
 
+########################
 # description
 # main runner for fastp
 
@@ -8,9 +9,11 @@ ver=1.0.0
 
 echo "hello world7"
 
+########################
 # history
 # 240710 start writing (Tadahaya Mizuno)
 
+########################
 # preparation
 # function for help
 usage() {
@@ -39,49 +42,47 @@ get_upper() {
   echo `realpath $d`
 }
 
-echo `get_upper $1`
+# make tmp_dir under the given
+make_tmp() {
+  tmp_path=${1}/tmp_dir
+  if [ -e ${tmp_path} ]; then
+      rm -rf ${tmp_path}
+  fi
+  mkdir ${tmp_path}
+}
 
-# # make tmp_dir under the given
-# make_tmp() {
-#   tmp_path=${1}/tmp_dir
-#   if [ -e ${tmp_path} ]; then
-#       rm -rf ${tmp_path}
-#   fi
-#   mkdir ${tmp_path}
-# }
+# url argument check
+if [ "$1" = "" ]; then
+  echo "!! Give a name of fastq file !!"
+  exit 1
+fi
+pe=false
+if [ "$2" = "" ]; then
+  pe=true
+fi
 
-# # url argument check
-# if [ "$1" = "" ]; then
-#   echo "!! Give a name of fastq file !!"
-#   exit 1
-# fi
-# pe=false
-# if [ "$2" = "" ]; then
-#   pe=true
-# fi
-
-# # option check
-# tag=trim
-# while getopts t:hv opt; do
-#   case "$opt" in
-#     h)
-#       usage
-#       exit
-#       ;;
-#     t)
-#       tag=$OPTARG
-#       ;;
-#     v)
-#       echo "v$ver"
-#       exit
-#       ;;
-#     \?)
-#       echo '!! Unexpected argument !!'
-#       exit 1
-#       ;;
-#   esac
-# done
-# shift $((OPTIND - 1))
+# option check
+tag=trim
+while getopts t:hv opt; do
+  case "$opt" in
+    h)
+      usage
+      exit
+      ;;
+    t)
+      tag=$OPTARG
+      ;;
+    v)
+      echo "v$ver"
+      exit
+      ;;
+    \?)
+      echo '!! Unexpected argument !!'
+      exit 1
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
 
 # ########################
 # # main function
