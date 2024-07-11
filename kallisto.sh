@@ -87,25 +87,22 @@ idx=`realpath $1` # full path
 full1=`realpath $2` # full path
 work_dir=`dirname ${full1}` # full path
 
+# kallisto
+f1=`basename "${full1}"`
+n1=`get_filename ${f1}`
+outdir=${work_dir}/KALLISTO_${n1}
 
-m=`get_filename ${full1}`
-
-# # kallisto
-# f1=`basename "${full1}"`
-# n1=`get_filename ${f1}`
-# outdir=${work_dir}/KALLISTO_${n1}
-
-# if "${pe}"; then
-#   full2=`realpath $3`
-#   f2=`basename "${full2}"`
-#   n2=`get_filename ${f2}`
-#   kallisto \
-#     quant -i ${idx} -o ${outdir} \
-#     -b ${n_boot} -t ${n_threads} \
-#     ${full1} ${full2}
-# else
-#   kallisto \
-#     quant -i ${idx} -o ${outdir} \
-#     -b ${n_boot} -t ${n_threads} \
-#     ${full1}
-# fi
+if "${pe}"; then
+  full2=`realpath $3`
+  f2=`basename "${full2}"`
+  n2=`get_filename ${f2}`
+  kallisto \
+    quant -i ${idx} -o ${outdir} \
+    -b ${n_boot} -t ${n_threads} \
+    ${full1} ${full2}
+else
+  kallisto \
+    quant -i ${idx} -o ${outdir} \
+    -b ${n_boot} -t ${n_threads} \
+    ${full1}
+fi
