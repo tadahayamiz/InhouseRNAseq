@@ -115,10 +115,10 @@ parent=`dirname ${work_dir}`
 # pushd ${work_dir}
 
 for f1 in "${work_dir}*_1.*"; do
-  q1+=($f1)
+  q1+=(${f1})
 done
 for f2 in "${work_dir}*_2.*"; do
-  q2+=($f2)
+  q2+=(${f2})
 done
 
 echo ${q1[@]}
