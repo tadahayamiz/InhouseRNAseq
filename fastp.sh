@@ -28,10 +28,10 @@ get_filename() {
     echo "$1" | sed 's/\.[^\.]*$//'
 }
 
-# # get absolute path
-# realpath() {
-#   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
-# }
+# get absolute path
+realpath() {
+  case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
+}
 
 # # get absolute path of the parent dir of the given
 # get_upper() {
