@@ -87,27 +87,35 @@ shift $((OPTIND - 1))
 # main function
 
 # path handling
-full=`realpath $1` # full path
+full1=`realpath $1` # full path
 work_dir=`dirname ${full}` # full path
 parent=`get_upper ${work_dir}` # full path
 make_tmp ${parent} # prepare ${parent}/tmp_dir
 
 # fastp
-f1=`basename "$1"`
+f1=`basename "${full1}"`
 n1=`get_filename ${f1}`
-o1=${parent}/tmp_dir/${tag}_${f1}
-h1=${parent}/tmp_dir/report_${n1}.html
-j1=${parent}/tmp_dir/report_${n1}.json
+out1=${parent}/tmp_dir/${tag}_${f1}
+html1=${parent}/tmp_dir/report_${n1}.html
+json1=${parent}/tmp_dir/report_${n1}.json
 
 if "${pe}"; then
-  f2=`basename "$2"`
+  full2=`realpath $2`
+  f2=`basename "${full2}"`
   n2=`get_filename ${f2}`
-  o2=${parent}/tmp_dir/${tag}_${f2}
-  fastp --detect_adapter_for_pe -i ${f1} -I ${f2} -3 -o ${o1} -O ${o2} \
-  -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+  out2=${parent}/tmp_dir/${tag}_${f2}
+  fastp \
+    --detect_adapter_for_pe \
+    -i ${full1} -I ${full2} \
+    -o ${out1} -O ${out2} \
+    -h ${html1} -j ${json1} \
+    -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 else
-  fastp --detect_adapter_for_pe -i ${f1} -3 -o ${o1} \
-  -h ${h1} -j ${j1} -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
+  fastp \
+    --detect_adapter_for_pe \
+    -i ${full1} -o ${out1} \
+    -h ${html1} -j ${json1} \
+    -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 fi
 
 # change tmp_dir name
