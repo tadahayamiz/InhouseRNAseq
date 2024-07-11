@@ -38,7 +38,7 @@ realpath() {
 
 # url argument check
 # index file check
-if [ "$1" == *index* ]; then
+if [ "`echo $1 | grep index`" ]; then
   : # do nothing
 else
   echo "!! Unexpected argument: give index file !!"
