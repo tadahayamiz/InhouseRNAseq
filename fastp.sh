@@ -41,6 +41,8 @@ get_upper() {
   echo ${res}
 }
 
+echo `get_upper $1`
+
 # # make tmp_dir under the given
 # make_tmp() {
 #   tmp_path=${1}/tmp_dir
