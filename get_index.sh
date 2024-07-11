@@ -84,7 +84,7 @@ echo $output
 echo $fname
 
 # DL
-!wget -P ${output} ${tgt_url}
+wget -P ${output} ${tgt_url}
 
 # unzip
-!tar Jxfv "${output}/${fname}" -C ${output}
+tar Jxfv "${output}/${fname}" -C ${output}
