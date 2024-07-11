@@ -3,17 +3,14 @@
 # description
 # main runner for fastp
 
-########################
 # version
 ver=1.0.0
 
-echo "hello world2"
+echo "hello world3"
 
-########################
 # history
 # 240710 start writing (Tadahaya Mizuno)
 
-########################
 # preparation
 # function for help
 usage() {
