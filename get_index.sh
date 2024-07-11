@@ -35,11 +35,11 @@ realpath() {
 }
 
 # url argument check
-if [[ "$1"="human" ]]; then
+if [ "$1" = "human" ]; then
   tgt_url=${main_url/"SPECIES"/"human"}
-elif [[ "$1"="mouse" ]]; then
+elif [ "$1" = "mouse" ]; then
   tgt_url=${main_url/"SPECIES"/"mouse"}
-elif [[ "$1"="rat" ]]; then
+elif [ "$1" = "rat" ]; then
   tgt_url=${main_url/"SPECIES"/"rat"}
 else
   echo "!! Unexpected argument: give human, mouse, or rat !!"
