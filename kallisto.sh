@@ -74,7 +74,7 @@ else
   echo "!! Unexpected argument: give index file !!"
 fi
 # fastq file check
-n_args=$# - ${n_options}
+n_args=$($# - ${n_options})
 if [ ${n_args} -eq 2 ]; then
   pe=false
 elif [ ${n_args} -eq 3 ]; then

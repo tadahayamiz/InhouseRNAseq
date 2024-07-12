@@ -90,7 +90,7 @@ else
   echo "!! Unexpected argument: give index file !!"
 fi
 # fastq path check
-n_args=$# - ${n_options}
+n_args=$($# - ${n_options})
 if [ ${n_args} -eq 2 ]; then
   :
 else
