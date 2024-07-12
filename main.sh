@@ -46,27 +46,13 @@ make_tmp() {
   mkdir ${tmp_path}
 }
 
-# url argument check
-# index file check
-if [ "`echo $1 | grep index`" ]; then
-  : # do nothing
-else
-  echo "!! Unexpected argument: give index file !!"
-fi
-# fastq path check
-if [ $# -eq 2 ]; then
-  :
-else
-  echo "!! Unexpected argument: give index file path and fastq dir path !!"
-  exit 1
-fi
-
 # option check
 outdir=""
 res_only=false
 n_boot=100
 n_threads=8
-while getopts o:r:b:t:hv opt; do
+n_options=0
+while getopts o:b:t:hv opt; do
   case "$opt" in
     h)
       usage
@@ -74,12 +60,15 @@ while getopts o:r:b:t:hv opt; do
       ;;
     o)
       outdir=$OPTARG
+      n_options+=1
       ;;
     b)
       n_boot=$OPTARG
+      n_options+=1
       ;;
     t)
       n_threads=$OPTARG
+      n_options+=1
       ;;
     v)
       echo "v$ver"
@@ -93,13 +82,30 @@ while getopts o:r:b:t:hv opt; do
 done
 shift $((OPTIND - 1))
 
+# argument check
+# index file check
+if [ "`echo $1 | grep index`" ]; then
+  : # do nothing
+else
+  echo "!! Unexpected argument: give index file !!"
+fi
+# fastq path check
+n_args=$# - ${n_options}
+if [ ${n_args} -eq 2 ]; then
+  :
+else
+  echo "!! Unexpected argument: give index file path and fastq dir path !!"
+  exit 1
+fi
+
 ########################
 # main function
 # display time
 sta=`date +%s`
-echo ">> start fastp + kallisto"
+echo "> start fastp + kallisto"
 
 # path handling
+index_path=`realpath $1` # full path
 work_dir=`realpath $2` # full path
 parent=`dirname ${work_dir}`
 make_tmp ${parent}
@@ -133,35 +139,43 @@ if [ ${l1} == 0 ] && [ ${l2} == 0 ]; then
   exit 1
 elif [ ${l2} == 0 ]; then
   echo ">> single-end"
-
-
-
+  for ix in ${!q1[@]}; do
+    echo "--- iter "$ix" ---"
+    # fastp
+    echo ">> fastp"
+    source ${path_fastp} ${q1[ix]}
+    # kallisto
+    # get fastq files starting with TRIM_
+    echo ">> kallisto"
+    tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*"`
+    source ${path_kallisto} ${index_path} ${tmp1} -b ${n_boot} -t ${n_threads}
+    # move the result
+    mv ${work_dir}/KALLISTO_* ${outdir}
+    # remove the intermediate files
+    rm -rf ${work_dir}/TRIM_*
+  done
 elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
   for ix in ${!q1[@]}; do
     echo "--- iter "$ix" ---"
     # fastp
+    echo ">> fastp"
     source ${path_fastp} ${q1[ix]} ${q2[ix]}
     # kallisto
     # get fastq files starting with TRIM_
+    echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1*"`
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2*"`
-    source ${path_kallisto} $1 ${tmp1} ${tmp2} -b ${n_boot} -t ${n_threads}
+    source ${path_kallisto} ${index_path} ${tmp1} ${tmp2} -b ${n_boot} -t ${n_threads}
     # move the result
     mv ${work_dir}/KALLISTO_* ${outdir}
+    # remove the intermediate files
+    rm -rf ${work_dir}/TRIM_*
   done
-
-
-
-
-
 else
   echo "!! The number of ends were mismatched !!"
   exit 1
 fi
-
-
-
 
 # display time
 end=`date +%s`
@@ -170,7 +184,7 @@ hr=`expr ${pt} / 3600`
 pt=`expr ${pt} % 3600`
 mi=`expr ${pt} / 60`
 se=`expr ${pt} % 60`
-echo ">>> end"
+echo "> end"
 echo "--- Elapsed Time ---"
 echo "${hr} h ${mi} m ${se} s"
 echo "--------------------"

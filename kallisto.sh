@@ -36,24 +36,8 @@ realpath() {
   case "$1" in /*) ;; *) printf '%s/' "$PWD";; esac; echo "$1"
 }
 
-# url argument check
-# index file check
-if [ "`echo $1 | grep index`" ]; then
-  : # do nothing
-else
-  echo "!! Unexpected argument: give index file !!"
-fi
-# fastq file check
-if [ $# -eq 2 ]; then
-  pe=false
-elif [ $# -eq 3 ]; then
-  pe=true
-else
-  echo "!! Unexpected argument: give 1 or 2 fastq files !!"
-  exit 1
-fi
-
 # option check
+n_options=0
 n_boot=100
 n_threads=8
 while getopts b:t:hv opt; do
@@ -64,9 +48,11 @@ while getopts b:t:hv opt; do
       ;;
     b)
       n_boot=$OPTARG
+      n_options+=1
       ;;
     t)
       n_threads=$OPTARG
+      n_options+=1
       ;;
     v)
       echo "v$ver"
@@ -79,6 +65,24 @@ while getopts b:t:hv opt; do
   esac
 done
 shift $((OPTIND - 1))
+
+# url argument check
+# index file check
+if [ "`echo $1 | grep index`" ]; then
+  : # do nothing
+else
+  echo "!! Unexpected argument: give index file !!"
+fi
+# fastq file check
+n_args=$# - ${n_options}
+if [ ${n_args} -eq 2 ]; then
+  pe=false
+elif [ ${n_args} -eq 3 ]; then
+  pe=true
+else
+  echo "!! Unexpected argument: give 1 or 2 fastq files !!"
+  exit 1
+fi
 
 ########################
 # main function
