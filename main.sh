@@ -158,18 +158,19 @@ elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
   for ix in ${!q1[@]}; do
     echo "--- iter "$ix" ---"
+
+
+    echo $outdir
+
+
     # fastp
     echo ">> fastp"
     source ${path_fastp} ${q1[ix]} ${q2[ix]}
     # kallisto
     # get fastq files starting with TRIM_
     echo ">> kallisto"
-    tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1*"`
-    tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2*"`
-
-    echo ${tmp1}
-    echo ${tmp2}
-
+    tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1.*"`
+    tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2.*"`
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
     # move the result
     mv ${work_dir}/KALLISTO_* ${outdir}
