@@ -80,6 +80,9 @@ if [ ${n_args} -eq 2 ]; then
 elif [ ${n_args} -eq 3 ]; then
   pe=true
 else
+  echo ${n_args}
+  echo $#
+  echo ${n_options}
   echo "!! Unexpected argument: give 1 or 2 fastq files !!"
   exit 1
 fi
