@@ -153,11 +153,6 @@ elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
   for ix in ${!q1[@]}; do
     echo "--- iter "$ix" ---"
-
-
-    echo $outdir
-
-
     # fastp
     echo ">> fastp"
     source ${path_fastp} ${q1[ix]} ${q2[ix]}
