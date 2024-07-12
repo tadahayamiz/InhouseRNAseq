@@ -51,7 +51,6 @@ outdir=""
 res_only=false
 n_boot=100
 n_threads=8
-n_options=0
 while getopts o:b:t:hv opt; do
   case "$opt" in
     h)
@@ -60,15 +59,12 @@ while getopts o:b:t:hv opt; do
       ;;
     o)
       outdir=$OPTARG
-      n_options=$((n_options + 1))
       ;;
     b)
       n_boot=$OPTARG
-      n_options=$((n_options + 1))
       ;;
     t)
       n_threads=$OPTARG
-      n_options=$((n_options + 1))
       ;;
     v)
       echo "v$ver"
@@ -90,8 +86,7 @@ else
   echo "!! Unexpected argument: give index file !!"
 fi
 # fastq path check
-n_args=$(($# - ${n_options}))
-if [ ${n_args} -eq 2 ]; then
+if [ $# -eq 2 ]; then
   :
 else
   echo "!! Unexpected argument: give index file path and fastq dir path !!"
@@ -110,7 +105,7 @@ work_dir=`realpath $2` # full path
 parent=`dirname ${work_dir}`
 make_tmp ${parent}
 if [ "$outdir" = "" ]; then
-  outdir="${parent}/TMPDIR"
+  outdir="${parent}/RESULT"
 fi
 path_script=`realpath $0`
 dir_script=`dirname ${path_script}`

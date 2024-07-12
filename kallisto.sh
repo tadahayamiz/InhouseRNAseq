@@ -39,7 +39,6 @@ realpath() {
 # option check
 n_boot=100
 n_threads=8
-n_options=0
 while getopts b:t:hv opt; do
   case "$opt" in
     h)
@@ -48,11 +47,9 @@ while getopts b:t:hv opt; do
       ;;
     b)
       n_boot=$OPTARG
-      n_options=$((n_options + 1))
       ;;
     t)
       n_threads=$OPTARG
-      n_options=$((n_options + 1))
       ;;
     v)
       echo "v$ver"
@@ -74,15 +71,11 @@ else
   echo "!! Unexpected argument: give index file !!"
 fi
 # fastq file check
-n_args=$(($# - ${n_options}))
-if [ ${n_args} -eq 2 ]; then
+if [ $# -eq 2 ]; then
   pe=false
-elif [ ${n_args} -eq 3 ]; then
+elif [ $# -eq 3 ]; then
   pe=true
 else
-  echo ${n_args}
-  echo $#
-  echo ${n_options}
   echo "!! Unexpected argument: give 1 or 2 fastq files !!"
   exit 1
 fi
