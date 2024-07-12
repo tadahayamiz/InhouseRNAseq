@@ -60,15 +60,15 @@ while getopts o:b:t:hv opt; do
       ;;
     o)
       outdir=$OPTARG
-      n_options+=1
+      n_options=$((n_options + 1))
       ;;
     b)
       n_boot=$OPTARG
-      n_options+=1
+      n_options=$((n_options + 1))
       ;;
     t)
       n_threads=$OPTARG
-      n_options+=1
+      n_options=$((n_options + 1))
       ;;
     v)
       echo "v$ver"

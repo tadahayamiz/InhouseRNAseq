@@ -39,6 +39,7 @@ realpath() {
 # option check
 n_boot=100
 n_threads=8
+n_options=0
 while getopts b:t:hv opt; do
   case "$opt" in
     h)
@@ -47,9 +48,11 @@ while getopts b:t:hv opt; do
       ;;
     b)
       n_boot=$OPTARG
+      n_options=$((n_options + 1))
       ;;
     t)
       n_threads=$OPTARG
+      n_options=$((n_options + 1))
       ;;
     v)
       echo "v$ver"
