@@ -109,7 +109,7 @@ index_path=`realpath $1` # full path
 work_dir=`realpath $2` # full path
 parent=`dirname ${work_dir}`
 make_tmp ${parent}
-if [ "${outdir}" = "" ]; then
+if [ "$outdir" = "" ]; then
   outdir="${parent}/TMPDIR"
 fi
 path_script=`realpath $0`
