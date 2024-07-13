@@ -47,7 +47,7 @@ make_tmp() {
 }
 
 # option check
-outdir=""
+outdir_name=""
 res_only=false
 n_boot=100
 n_threads=8
@@ -58,7 +58,7 @@ while getopts o:b:t:hv opt; do
       exit
       ;;
     o)
-      outdir=$OPTARG
+      outdir_name=$OPTARG
       ;;
     b)
       n_boot=$OPTARG
@@ -104,8 +104,10 @@ index_path=`realpath $1` # full path
 work_dir=`realpath $2` # full path
 parent=`dirname ${work_dir}`
 make_tmp ${parent}
-if [ "$outdir" = "" ]; then
+if [ -z "$outdir_name" ]; then
   outdir="${parent}/RESULT"
+else
+  outdir="${parent}/${outdir_name}"
 fi
 path_script=`realpath $0`
 dir_script=`dirname ${path_script}`
