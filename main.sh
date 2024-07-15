@@ -148,9 +148,9 @@ elif [ ${l2} == 0 ]; then
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*"`
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
     # move the result
-    mv ${work_dir}/KALLISTO_* ${outdir}
+    mv "${work_dir}/KALLISTO_*" ${outdir}
     # remove the intermediate files
-    rm -rf ${work_dir}/TRIM_*
+    rm -rf "${work_dir}/TRIM_*"
   done
 elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
