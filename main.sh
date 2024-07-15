@@ -109,6 +109,7 @@ if [ -z "$outdir_name" ]; then
 else
   outdir="${parent}/${outdir_name}"
 fi
+mv ${parent}/TMPDIR ${outdir}
 path_script=`realpath $0`
 dir_script=`dirname ${path_script}`
 path_fastp="${dir_script}/fastp.sh"
