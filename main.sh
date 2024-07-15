@@ -148,6 +148,7 @@ elif [ ${l2} == 0 ]; then
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*"`
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
     # move the result
+    mv "${work_dir}/report_*" ${outdir}
     mv "${work_dir}/KALLISTO_*" ${outdir}
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_*"
@@ -166,11 +167,10 @@ elif [ ${l1} == ${l2} ]; then
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2.*"`
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
     # move the result
-    mv ${work_dir}/report_* ${parent}/TMPDIR
-    mv ${work_dir}/KALLISTO_* ${parent}/TMPDIR
-    mv ${parent}/TMPDIR ${outdir}
+    mv "${work_dir}/report_*" ${outdir}
+    mv "${work_dir}/KALLISTO_*" ${outdir}
     # remove the intermediate files
-    rm -rf ${work_dir}/TRIM_*
+    rm -rf "${work_dir}/TRIM_*"
   done
 else
   echo "!! The number of ends were mismatched !!"
