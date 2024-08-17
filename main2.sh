@@ -3,6 +3,7 @@
 ########################
 # description
 # main runner for fastp + kalisto
+# ファイル移動のテスト用 240817
 
 # version
 ver=1.0.0
@@ -141,14 +142,21 @@ elif [ ${l2} == 0 ]; then
     echo "--- iter "$ix" ---"
     # fastp
     echo ">> fastp"
-    source ${path_fastp} ${q1[ix]}
+    
+    # source ${path_fastp} ${q1[ix]}
+    touch ${work_dir}/TRIM_`get_filename ${q1[ix]}` # for test
+    touch ${work_dir}/report_`get_filename ${q1[ix]}` # for test
+
     # kallisto
     # get fastq files starting with TRIM_
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*"`
-    source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
+
+    # source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
+    touch ${work_dir}/KALLISTO_`get_filename ${tmp1}` # for test
+
     # move the result after sleep
-    sleep 60
+    sleep 30
     mv "${work_dir}/report_*" ${outdir}
     mv "${work_dir}/KALLISTO_*" ${outdir}
     # change the name of the KALLISTO output by removing the prefix
@@ -162,15 +170,25 @@ elif [ ${l1} == ${l2} ]; then
     echo "--- iter "$ix" ---"
     # fastp
     echo ">> fastp"
-    source ${path_fastp} ${q1[ix]} ${q2[ix]}
+
+
+    # source ${path_fastp} ${q1[ix]} ${q2[ix]}
+    touch ${work_dir}/TRIM_`get_filename ${q1[ix]}` # for test
+    touch ${work_dir}/report_`get_filename ${q1[ix]}` # for test
+
+
     # kallisto
     # get fastq files starting with TRIM_
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1.*"`
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2.*"`
-    source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
+
+    # source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
+    touch ${work_dir}/KALLISTO_`get_filename ${tmp1}` # for test
+
+
     # move the result after sleep
-    sleep 60
+    sleep 30
     mv "${work_dir}/report_*" ${outdir}
     mv "${work_dir}/KALLISTO_*" ${outdir}
     # change the name of the KALLISTO output by removing the prefix
