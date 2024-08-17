@@ -143,21 +143,19 @@ elif [ ${l2} == 0 ]; then
     echo ">> fastp"
     source ${path_fastp} ${q1[ix]}
     # kallisto
+    sleep 5
     # get fastq files starting with TRIM_
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*"`
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
     # move the result after sleep
-    sleep 60
-    
-    echo ${work_dir}
-
-    mv "${work_dir}/report_*" ${outdir} # no such file or directory errorが出る
-    mv "${work_dir}/KALLISTO_*" ${outdir}
+    sleep 5
+    mv "${work_dir}/report_"* ${outdir} # no such file or directory errorが出る
+    mv "${work_dir}/KALLISTO_"* ${outdir}
     # change the name of the KALLISTO output by removing the prefix
     mv "${outdir}/KALLISTO_TRIM_`get_filename ${q1[ix]}`" "${outdir}/`get_filename ${q1[ix]}`"
     # remove the intermediate files
-    rm -rf "${work_dir}/TRIM_*"
+    rm -rf "${work_dir}/TRIM_"*
   done
 elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
@@ -167,22 +165,20 @@ elif [ ${l1} == ${l2} ]; then
     echo ">> fastp"
     source ${path_fastp} ${q1[ix]} ${q2[ix]}
     # kallisto
+    sleep 5
     # get fastq files starting with TRIM_
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1.*"`
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2.*"`
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
     # move the result after sleep
-    sleep 60
-
-    echo ${work_dir} # pathの確認
-
-    mv "${work_dir}/report_*" ${outdir}
-    mv "${work_dir}/KALLISTO_*" ${outdir}
+    sleep 5
+    mv "${work_dir}/report_"* ${outdir}
+    mv "${work_dir}/KALLISTO_"* ${outdir}
     # change the name of the KALLISTO output by removing the prefix
     mv "${outdir}/KALLISTO_TRIM_`get_filename ${q1[ix]}`" "${outdir}/`get_filename ${q1[ix]}`"
     # remove the intermediate files
-    rm -rf "${work_dir}/TRIM_*"
+    rm -rf "${work_dir}/TRIM_"*
   done
 else
   echo "!! The number of ends were mismatched !!"
