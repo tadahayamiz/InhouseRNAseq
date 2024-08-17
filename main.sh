@@ -149,7 +149,10 @@ elif [ ${l2} == 0 ]; then
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
     # move the result after sleep
     sleep 60
-    mv "${work_dir}/report_*" ${outdir}
+    
+    echo ${work_dir}
+
+    mv "${work_dir}/report_*" ${outdir} # no such file or directory errorが出る
     mv "${work_dir}/KALLISTO_*" ${outdir}
     # change the name of the KALLISTO output by removing the prefix
     mv "${outdir}/KALLISTO_TRIM_`get_filename ${q1[ix]}`" "${outdir}/`get_filename ${q1[ix]}`"
@@ -171,6 +174,9 @@ elif [ ${l1} == ${l2} ]; then
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
     # move the result after sleep
     sleep 60
+
+    echo ${work_dir} # pathの確認
+
     mv "${work_dir}/report_*" ${outdir}
     mv "${work_dir}/KALLISTO_*" ${outdir}
     # change the name of the KALLISTO output by removing the prefix
