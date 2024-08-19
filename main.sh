@@ -100,16 +100,21 @@ sta=`date +%s`
 echo "> start fastp + kallisto"
 
 # path handling
+# parent
+#   |- workdir
+#   |- outdir
 index_path=`realpath $1` # full path
 work_dir=`realpath $2` # full path
-parent=`dirname ${work_dir}`
-make_tmp ${parent}
+parent=`dirname ${work_dir}` # full path
 if [ -z "$outdir_name" ]; then
   outdir="${parent}/RESULT"
 else
   outdir="${parent}/${outdir_name}"
 fi
-mv ${parent}/TMPDIR ${outdir}
+# make RESULT directory if it does not exist
+if [ ! -e ${outdir} ]; then
+  mkdir ${outdir}
+fi
 path_script=`realpath $0`
 dir_script=`dirname ${path_script}`
 path_fastp="${dir_script}/fastp.sh"
@@ -148,12 +153,19 @@ elif [ ${l2} == 0 ]; then
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*"`
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
-    # move the result after sleep
+    # summarize the result
     sleep 5
-    mv "${work_dir}/report_"* ${outdir} # no such file or directory errorが出る
-    mv "${work_dir}/KALLISTO_"* ${outdir}
-    # change the name of the KALLISTO output by removing the prefix
-    mv "${outdir}/KALLISTO_TRIM_`get_filename ${q1[ix]}`" "${outdir}/`get_filename ${q1[ix]}`"
+    # obtain the path of the result
+    # the path is the first one in the list
+    res_path=`find ${work_dir} -maxdepth 1 -name "KALLISTO_*" -print -quit`
+    # move report files to the above
+    mv "${work_dir}/report_"* ${res_path}
+    # rename the res_path by removing the prefix
+    fname=`basename ${q1[ix]}`
+    fname2=`get_filename ${fname}`
+    mv "${res_path}" "${workdir}/${fname2}"
+    # move the result to the outdir
+    mv "${workdir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
   done
@@ -171,14 +183,20 @@ elif [ ${l1} == ${l2} ]; then
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1.*"`
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2.*"`
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
-    # move the result after sleep
+    # summarize the result
     sleep 5
-    mv "${work_dir}/report_"* ${outdir}
-    mv "${work_dir}/KALLISTO_"* ${outdir}
-    # change the name of the KALLISTO output by removing the prefix
-    mv "${outdir}/KALLISTO_TRIM_`get_filename ${q1[ix]}`" "${outdir}/`get_filename ${q1[ix]}`"
+    # obtain the path of the result
+    # the path is the first one in the list
+    res_path=`find ${work_dir} -maxdepth 1 -name "KALLISTO_*" -print -quit`
+    # move report files to the above
+    mv "${work_dir}/report_"* ${res_path}
+    # rename the res_path by removing the prefix
+    fname=`basename ${q1[ix]}`
+    fname2=`get_filename ${fname}`
+    mv "${res_path}" "${workdir}/${fname2}"
+    # move the result to the outdir
+    mv "${workdir}/${fname2}" "${outdir}"
     # remove the intermediate files
-    rm -rf "${work_dir}/TRIM_"*
   done
 else
   echo "!! The number of ends were mismatched !!"
