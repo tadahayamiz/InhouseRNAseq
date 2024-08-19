@@ -191,10 +191,21 @@ elif [ ${l1} == ${l2} ]; then
     res_path=`find ${work_dir} -maxdepth 1 -name "KALLISTO_*" -print -quit`
     # move report files to the above
     mv "${work_dir}/report_"* ${res_path}
+
+    # ここまではOK
+
     # rename the res_path by removing the prefix
+    sleep 30
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
+
+    echo "fname: ${fname}"
+    echo "fname2: ${fname2}"
+
     mv "${res_path}" "${workdir}/${fname2}"
+
+    # ここで上手くいっていない
+
     # move the result to the outdir
     mv "${workdir}/${fname2}" "${outdir}"
     # remove the intermediate files
@@ -217,8 +228,3 @@ echo "> end"
 echo "--- Elapsed Time ---"
 echo "${hr} h ${mi} m ${se} s"
 echo "--------------------"
-
-
-# ToDo
-# mv: cannot stat '{path}/report_*': No such file or directoryのエラーが出た
-# KALLISTOも同様
