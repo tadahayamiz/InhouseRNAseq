@@ -97,9 +97,6 @@ if "${pe}"; then
   f2=`basename "${full2}"`
   n2=`get_filename ${f2}`
   out2=${work_dir}/${tag}_${f2}
-
-  echo "run fastp 1"
-
   fastp \
     --detect_adapter_for_pe \
     -i ${full1} -I ${full2} \
@@ -107,9 +104,6 @@ if "${pe}"; then
     -h ${html1} -j ${json1} \
     -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 else
-
-  echo "run fastp 2"
-
   fastp \
     --detect_adapter_for_pe \
     -i ${full1} -o ${out1} \

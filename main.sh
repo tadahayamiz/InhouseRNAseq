@@ -178,7 +178,7 @@ elif [ ${l1} == ${l2} ]; then
     echo ">> fastp"
     source ${path_fastp} ${q1[ix]} ${q2[ix]}
     # kallisto
-    sleep 5
+    sleep 10
     # get fastq files starting with TRIM_
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1.*"`
@@ -191,26 +191,27 @@ elif [ ${l1} == ${l2} ]; then
     res_path=`find ${work_dir} -maxdepth 1 -name "KALLISTO_*" -print -quit`
     # move report files to the above
     mv "${work_dir}/report_"* ${res_path}
-
-    # ここまではOK
-
     # rename the res_path by removing the prefix
-    sleep 30
+    sleep 120 # waiting for the completion of the trasfer
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
 
     echo "fname: ${fname}"
     echo "fname2: ${fname2}"
+    echo "res_path: ${res_path}"
+    echo "${workdir}/${fname2}"
 
     mv "${res_path}" "${workdir}/${fname2}"
 
     # ここで上手くいっていない
 
     # move the result to the outdir
+    sleep 120 # waiting for the completion of the trasfer
     mv "${workdir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
     echo ">> iter ""$ix"" done"
+    sleep 120 # waiting for the completion of RAM release
   done
 else
   echo "!! The number of ends were mismatched !!"
