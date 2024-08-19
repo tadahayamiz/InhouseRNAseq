@@ -12,9 +12,6 @@ ver=1.0.0
 # history
 # 240710 start writing (Tadahaya Mizuno)
 
-echo "test 0"
-
-
 ########################
 # preparation
 # function for help
@@ -84,9 +81,6 @@ shift $((OPTIND - 1))
 ########################
 # main function
 
-echo "test 1"
-
-
 # path handling
 full1=`realpath $1` # full path
 work_dir=`dirname ${full1}` # full path
@@ -103,6 +97,9 @@ if "${pe}"; then
   f2=`basename "${full2}"`
   n2=`get_filename ${f2}`
   out2=${work_dir}/${tag}_${f2}
+
+  echo "run fastp 1"
+
   fastp \
     --detect_adapter_for_pe \
     -i ${full1} -I ${full2} \
@@ -110,12 +107,12 @@ if "${pe}"; then
     -h ${html1} -j ${json1} \
     -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 else
+
+  echo "run fastp 2"
+
   fastp \
     --detect_adapter_for_pe \
     -i ${full1} -o ${out1} \
     -h ${html1} -j ${json1} \
     -3 -q 15 -n 10 -t 1 -T 1 -l 20 -w 16 -f 1 -F 1
 fi
-
-
-echo "test 2"
