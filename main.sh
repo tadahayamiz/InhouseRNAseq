@@ -190,6 +190,11 @@ elif [ ${l1} == ${l2} ]; then
     # the path is the first one in the list
     res_path=`find ${work_dir} -maxdepth 1 -name "KALLISTO_*" -print -quit`
     # move report files to the above
+
+    echo ${res_path}
+    ls ${work_dir}
+    ls ${work_dir}/KALLISTO_*
+
     mv "${work_dir}/report_"* ${res_path}
     # rename the res_path by removing the prefix
     fname=`basename ${q1[ix]}`
