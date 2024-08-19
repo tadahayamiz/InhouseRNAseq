@@ -168,6 +168,7 @@ elif [ ${l2} == 0 ]; then
     mv "${workdir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
+    echo ">> iter ""$ix"" done"
   done
 elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
@@ -197,6 +198,8 @@ elif [ ${l1} == ${l2} ]; then
     # move the result to the outdir
     mv "${workdir}/${fname2}" "${outdir}"
     # remove the intermediate files
+    rm -rf "${work_dir}/TRIM_"*
+    echo ">> iter ""$ix"" done"
   done
 else
   echo "!! The number of ends were mismatched !!"
