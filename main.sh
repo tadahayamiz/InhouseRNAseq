@@ -165,15 +165,26 @@ elif [ ${l2} == 0 ]; then
     # move report files to the above
     mv "${work_dir}/report_"* ${res_path}
     # rename the res_path by removing the prefix
-    sleep 120 # waiting for the completion of the trasfer
+    sleep 60 # waiting for the completion of the trasfer
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
     mv "${res_path}" "${work_dir}/${fname2}"
     # move the result to the outdir
+    sleep 60 # waiting for the completion of the trasfer
+    # to avoid outdir overwrite
+    if [ -z "$outdir_name" ]; then
+      outdir="${parent}/RESULT"
+    else
+      outdir="${parent}/${outdir_name}"
+    fi
     mv "${work_dir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
+    # move the completed input to the DONE directory
+    mv "${q1[ix]}" "${work_dir}/DONE"
     echo ">> iter ""$ix"" done"
+    echo "sleep for the completion of RAM release..."
+    sleep 120 # waiting for the completion of RAM release
   done
 elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
@@ -181,13 +192,6 @@ elif [ ${l1} == ${l2} ]; then
     echo "--- iter "$ix" ---"
     # fastp
     echo ">> fastp"
-
-    # path_fastpの確認
-    echo ">> path_fastp: ""${path_fastp}"
-    echo ">> q1[ix]: ""${q1[ix]}"
-    echo ">> q2[ix]: ""${q2[ix]}"
-
-
     source ${path_fastp} ${q1[ix]} ${q2[ix]}
     # kallisto
     sleep 5
@@ -204,40 +208,27 @@ elif [ ${l1} == ${l2} ]; then
     # move report files to the above
     mv "${work_dir}/report_"* ${res_path}
     # rename the res_path by removing the prefix
-    sleep 120 # waiting for the completion of the trasfer
+    sleep 60 # waiting for the completion of the trasfer
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
-    mv -v "${res_path}" "${work_dir}/${fname2}"
+    mv "${res_path}" "${work_dir}/${fname2}"
     # move the result to the outdir
-    sleep 120 # waiting for the completion of the trasfer
+    sleep 60 # waiting for the completion of the trasfer
     # to avoid outdir overwrite
     if [ -z "$outdir_name" ]; then
       outdir="${parent}/RESULT"
     else
       outdir="${parent}/${outdir_name}"
     fi
-    mv -v "${work_dir}/${fname2}" "${outdir}"
+    mv "${work_dir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
-
-
-    # check done_dir
-    echo ">> done_dir: ""${work_dir}/DONE"
-
-
-
     # move the completed input to the DONE directory
-    mv -v "${q1[ix]}" "${work_dir}/DONE"
-    mv -v "${q2[ix]}" "${work_dir}/DONE"
-
-
-    # check done_dir
-    echo ">> done_dir: ""${work_dir}/DONE"
-
-
+    mv "${q1[ix]}" "${work_dir}/DONE"
+    mv "${q2[ix]}" "${work_dir}/DONE"
     echo ">> iter ""$ix"" done"
     echo "sleep for the completion of RAM release..."
-    sleep 600 # waiting for the completion of RAM release
+    sleep 120 # waiting for the completion of RAM release
   done
 else
   echo "!! The number of ends were mismatched !!"
