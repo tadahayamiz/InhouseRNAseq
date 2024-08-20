@@ -115,6 +115,10 @@ fi
 if [ ! -e ${outdir} ]; then
   mkdir ${outdir}
 fi
+# make DONE directory if it does not exist
+if [ ! -e "${work_dir}/DONE" ]; then
+  mkdir "${work_dir}/DONE"
+fi
 path_script=`realpath $0`
 dir_script=`dirname ${path_script}`
 path_fastp="${dir_script}/fastp.sh"
@@ -191,24 +195,9 @@ elif [ ${l1} == ${l2} ]; then
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1.*"`
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2.*"`
-
-    out2="${outdir}"
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
     # summarize the result
     sleep 5
-
-
-    if [ -z "$outdir_name" ]; then
-      outdir="${parent}/RESULT"
-    else
-      outdir="${parent}/${outdir_name}"
-    fi
-
-    # check outdir
-    echo ">> outdir: ""${outdir}"
-    echo ">> outdir2: ""${out2}"
-
-
     # obtain the path of the result
     # the path is the first one in the list
     res_path=`find ${work_dir} -maxdepth 1 -name "KALLISTO_*" -print -quit`
@@ -218,20 +207,34 @@ elif [ ${l1} == ${l2} ]; then
     sleep 120 # waiting for the completion of the trasfer
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
-
-
-
-
     mv -v "${res_path}" "${work_dir}/${fname2}"
-
-
-
-
     # move the result to the outdir
     sleep 120 # waiting for the completion of the trasfer
+    # to avoid outdir overwrite
+    if [ -z "$outdir_name" ]; then
+      outdir="${parent}/RESULT"
+    else
+      outdir="${parent}/${outdir_name}"
+    fi
     mv -v "${work_dir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
+
+
+    # check done_dir
+    echo ">> done_dir: ""${work_dir}/DONE"
+
+
+
+    # move the completed input to the DONE directory
+    mv -v "${q1[ix]}" "${work_dir}/DONE"
+    mv -v "${q2[ix]}" "${work_dir}/DONE"
+
+
+    # check done_dir
+    echo ">> done_dir: ""${work_dir}/DONE"
+
+
     echo ">> iter ""$ix"" done"
     echo "sleep for the completion of RAM release..."
     sleep 600 # waiting for the completion of RAM release
