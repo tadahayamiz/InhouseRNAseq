@@ -192,7 +192,7 @@ elif [ ${l1} == ${l2} ]; then
     # move report files to the above
     mv "${work_dir}/report_"* ${res_path}
     # rename the res_path by removing the prefix
-    sleep 30 # waiting for the completion of the trasfer
+    sleep 120 # waiting for the completion of the trasfer
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
 
@@ -204,12 +204,12 @@ elif [ ${l1} == ${l2} ]; then
     mv "${res_path}" "${work_dir}/${fname2}"
 
     # move the result to the outdir
-    sleep 30 # waiting for the completion of the trasfer
+    sleep 120 # waiting for the completion of the trasfer
     mv "${work_dir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
     echo ">> iter ""$ix"" done"
-    sleep 30 # waiting for the completion of RAM release
+    sleep 300 # waiting for the completion of RAM release
   done
 else
   echo "!! The number of ends were mismatched !!"
