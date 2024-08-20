@@ -177,6 +177,13 @@ elif [ ${l1} == ${l2} ]; then
     echo "--- iter "$ix" ---"
     # fastp
     echo ">> fastp"
+
+    # path_fastpの確認
+    echo ">> path_fastp: ""${path_fastp}"
+    echo ">> q1[ix]: ""${q1[ix]}"
+    echo ">> q2[ix]: ""${q2[ix]}"
+
+
     source ${path_fastp} ${q1[ix]} ${q2[ix]}
     # kallisto
     sleep 5
