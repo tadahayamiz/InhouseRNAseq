@@ -111,10 +111,25 @@ if [ -z "$outdir_name" ]; then
 else
   outdir="${parent}/${outdir_name}"
 fi
+
+
+
+# check outdir
+echo ">> outdir: ""${outdir}"
+
+
+
 # make RESULT directory if it does not exist
 if [ ! -e ${outdir} ]; then
   mkdir ${outdir}
 fi
+
+
+# check outdir
+echo ">> outdir: ""${outdir}"
+
+
+
 path_script=`realpath $0`
 dir_script=`dirname ${path_script}`
 path_fastp="${dir_script}/fastp.sh"
@@ -173,6 +188,12 @@ elif [ ${l2} == 0 ]; then
   done
 elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
+
+
+  # check outdir
+  echo ">> outdir: ""${outdir}"
+
+
   for ix in ${!q1[@]}; do
     echo "--- iter "$ix" ---"
     # fastp
@@ -187,6 +208,13 @@ elif [ ${l1} == ${l2} ]; then
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
     # summarize the result
     sleep 5
+
+
+    # check outdir
+    echo ">> outdir: ""${outdir}"
+
+
+
     # obtain the path of the result
     # the path is the first one in the list
     res_path=`find ${work_dir} -maxdepth 1 -name "KALLISTO_*" -print -quit`
@@ -197,6 +225,12 @@ elif [ ${l1} == ${l2} ]; then
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
     mv -v "${res_path}" "${work_dir}/${fname2}"
+
+
+    # check outdir
+    echo ">> outdir: ""${outdir}"
+
+
     # move the result to the outdir
     sleep 120 # waiting for the completion of the trasfer
     # print outdir
