@@ -161,6 +161,7 @@ elif [ ${l2} == 0 ]; then
     # move report files to the above
     mv "${work_dir}/report_"* ${res_path}
     # rename the res_path by removing the prefix
+    sleep 120 # waiting for the completion of the trasfer
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
     mv "${res_path}" "${work_dir}/${fname2}"
@@ -195,17 +196,10 @@ elif [ ${l1} == ${l2} ]; then
     sleep 120 # waiting for the completion of the trasfer
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
-
-    echo "fname: ${fname}"
-    echo "fname2: ${fname2}"
-    echo "res_path: ${res_path}"
-    echo "${work_dir}/${fname2}"
-
-    mv "${res_path}" "${work_dir}/${fname2}"
-
+    mv -v "${res_path}" "${work_dir}/${fname2}"
     # move the result to the outdir
     sleep 120 # waiting for the completion of the trasfer
-    mv "${work_dir}/${fname2}" "${outdir}"
+    mv -v "${work_dir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
     echo ">> iter ""$ix"" done"
