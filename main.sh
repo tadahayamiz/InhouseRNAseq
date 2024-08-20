@@ -224,11 +224,15 @@ elif [ ${l1} == ${l2} ]; then
     sleep 120 # waiting for the completion of the trasfer
     fname=`basename ${q1[ix]}`
     fname2=`get_filename ${fname}`
-    mv -v "${res_path}" "${work_dir}/${fname2}"
 
 
     # check outdir
     echo ">> outdir: ""${outdir}"
+
+
+    mv -v "${res_path}" "${work_dir}/${fname2}"
+
+
 
 
     # move the result to the outdir
