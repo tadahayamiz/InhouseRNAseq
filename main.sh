@@ -111,25 +111,10 @@ if [ -z "$outdir_name" ]; then
 else
   outdir="${parent}/${outdir_name}"
 fi
-
-
-
-# check outdir
-echo ">> outdir: ""${outdir}"
-
-
-
 # make RESULT directory if it does not exist
 if [ ! -e ${outdir} ]; then
   mkdir ${outdir}
 fi
-
-
-# check outdir
-echo ">> outdir: ""${outdir}"
-
-
-
 path_script=`realpath $0`
 dir_script=`dirname ${path_script}`
 path_fastp="${dir_script}/fastp.sh"
@@ -188,12 +173,6 @@ elif [ ${l2} == 0 ]; then
   done
 elif [ ${l1} == ${l2} ]; then
   echo ">> pair-end"
-
-
-  # check outdir
-  echo ">> outdir: ""${outdir}"
-
-
   for ix in ${!q1[@]}; do
     echo "--- iter "$ix" ---"
     # fastp
@@ -205,14 +184,22 @@ elif [ ${l1} == ${l2} ]; then
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1.*"`
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2.*"`
+
+    out2="${outdir}"
     source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
     # summarize the result
     sleep 5
 
 
+    if [ -z "$outdir_name" ]; then
+      outdir="${parent}/RESULT"
+    else
+      outdir="${parent}/${outdir_name}"
+    fi
+
     # check outdir
     echo ">> outdir: ""${outdir}"
-
+    echo ">> outdir2: ""${out2}"
 
 
     # obtain the path of the result
@@ -226,8 +213,6 @@ elif [ ${l1} == ${l2} ]; then
     fname2=`get_filename ${fname}`
 
 
-    # check outdir
-    echo ">> outdir: ""${outdir}"
 
 
     mv -v "${res_path}" "${work_dir}/${fname2}"
@@ -237,13 +222,11 @@ elif [ ${l1} == ${l2} ]; then
 
     # move the result to the outdir
     sleep 120 # waiting for the completion of the trasfer
-    # print outdir
-    echo ">> outdir: ""${outdir}"
-
     mv -v "${work_dir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
     echo ">> iter ""$ix"" done"
+    echo "sleep for the completion of RAM release..."
     sleep 600 # waiting for the completion of RAM release
   done
 else
