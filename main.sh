@@ -199,11 +199,14 @@ elif [ ${l1} == ${l2} ]; then
     mv -v "${res_path}" "${work_dir}/${fname2}"
     # move the result to the outdir
     sleep 120 # waiting for the completion of the trasfer
+    # print outdir
+    echo ">> outdir: ""${outdir}"
+
     mv -v "${work_dir}/${fname2}" "${outdir}"
     # remove the intermediate files
     rm -rf "${work_dir}/TRIM_"*
     echo ">> iter ""$ix"" done"
-    sleep 300 # waiting for the completion of RAM release
+    sleep 600 # waiting for the completion of RAM release
   done
 else
   echo "!! The number of ends were mismatched !!"
