@@ -3,6 +3,8 @@
 ########################
 # description
 # runner for kallisto
+# Note
+#   the version of kallisto and the downloaded index should be corresponding
 
 # version
 ver=1.0.0
