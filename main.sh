@@ -133,7 +133,7 @@ for f1 in "${work_dir}/"*_1.*; do
   base="${basename1%_1.*}"
 
   # check if the pair file exists
-  f2="${work_dir}/${base}_2.*"
+  f2=$(find "${work_dir}/" -type f -name "${base}_2.*")
 
   if [[ -n "$f2" ]]; then
     q1+=("$f1")
