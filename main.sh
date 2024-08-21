@@ -126,12 +126,19 @@ path_kallisto="${dir_script}/kallisto.sh"
 
 # get fastq file list
 q1=()
-for f1 in "${work_dir}/"*_1.*; do
-  q1+=("${f1}")
-done
 q2=()
-for f2 in "${work_dir}/"*_2.*; do
-  q2+=("${f2}")
+for f1 in "${work_dir}/"*_1.*; do
+  # extract characteristic part of the file name
+  basename1=$(basename "$f1")
+  base="${basename1%_1.*}"
+
+  # check if the pair file exists
+  f2="${work_dir}/${base}_2.*"
+
+  if [[ -n "$f2" ]]; then
+    q1+=("$f1")
+    q2+=("$f2")
+  fi
 done
 l1=${#q1[@]}
 l2=${#q2[@]}
