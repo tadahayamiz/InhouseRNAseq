@@ -10,6 +10,7 @@ ver=1.0.0
 ########################
 # history
 # 240711 start writing (Tadahaya Mizuno)
+# 250408 fix (Takumi Iwasaka)
 
 ########################
 # preparation
@@ -50,7 +51,7 @@ make_tmp() {
 outdir_name=""
 res_only=false
 n_boot=100
-n_threads=8
+n_threads=2 # 250326 8 → 2に変更
 while getopts o:b:t:hv opt; do
   case "$opt" in
     h)
@@ -127,13 +128,16 @@ path_kallisto="${dir_script}/kallisto.sh"
 # get fastq file list
 q1=()
 q2=()
+
 for f1 in "${work_dir}/"*_1.*; do
   # extract characteristic part of the file name
+  echo "検出されたファイル: $f1" 
   basename1=$(basename "$f1")
   base="${basename1%_1.*}"
 
   # check if the pair file exists
   f2=$(find "${work_dir}/" -type f -name "${base}_2.*")
+  echo "ペアのファイル: $f2"
 
   if [[ -n "$f2" ]]; then
     q1+=("$f1")
@@ -142,6 +146,9 @@ for f1 in "${work_dir}/"*_1.*; do
 done
 l1=${#q1[@]}
 l2=${#q2[@]}
+
+echo "q1 count: ${#q1[@]}"
+echo "q2 count: ${#q2[@]}"
 
 # make scripts executable
 chmod +x ${path_fastp}
@@ -157,13 +164,13 @@ elif [ ${l2} == 0 ]; then
     echo "--- iter "$ix" ---"
     # fastp
     echo ">> fastp"
-    source ${path_fastp} ${q1[ix]}
+    bash ${path_fastp} ${q1[ix]}
     # kallisto
     sleep 5
     # get fastq files starting with TRIM_
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*"`
-    source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
+    bash ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1}
     # summarize the result
     sleep 5
     # obtain the path of the result
@@ -199,14 +206,14 @@ elif [ ${l1} == ${l2} ]; then
     echo "--- iter "$ix" ---"
     # fastp
     echo ">> fastp"
-    source ${path_fastp} ${q1[ix]} ${q2[ix]}
+    bash ${path_fastp} ${q1[ix]} ${q2[ix]} 
     # kallisto
     sleep 5
     # get fastq files starting with TRIM_
     echo ">> kallisto"
     tmp1=`find ${work_dir} -maxdepth 1 -name "TRIM_*_1.*"`
     tmp2=`find ${work_dir} -maxdepth 1 -name "TRIM_*_2.*"`
-    source ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
+    bash ${path_kallisto} -b ${n_boot} -t ${n_threads} ${index_path} ${tmp1} ${tmp2}
     # summarize the result
     sleep 5
     # obtain the path of the result
@@ -235,10 +242,10 @@ elif [ ${l1} == ${l2} ]; then
     mv "${q2[ix]}" "${work_dir}/DONE"
     echo ">> iter ""$ix"" done"
     echo "sleep for the completion of RAM release..."
-    sleep 120 # waiting for the completion of RAM release
+    sleep 300 # waiting for the completion of RAM release
   done
 else
-  echo "!! The number of ends were mismatched !!"
+  echo "The number of ends were mismatched !!"
   exit 1
 fi
 
